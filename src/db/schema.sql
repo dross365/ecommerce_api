@@ -1,0 +1,48 @@
+-- USERS TABLE
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  name TEXT,
+  email TEXT UNIQUE NOT NULL,
+  password TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- PRODUCTS TABLE
+CREATE TABLE products (
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  description TEXT,
+  price NUMERIC NOT NULL,
+  stock INT NOT NULL
+);
+
+-- CARTS TABLE
+CREATE TABLE carts (
+  id SERIAL PRIMARY KEY,
+  user_id INT NOT NULL REFERENCES users(id)
+);
+
+-- CART ITEMS TABLE
+CREATE TABLE cart_items (
+  id SERIAL PRIMARY KEY,
+  cart_id INT NOT NULL REFERENCES carts(id) ON DELETE CASCADE,
+  product_id INT NOT NULL REFERENCES products(id),
+  quantity INT NOT NULL
+);
+
+-- ORDERS TABLE
+CREATE TABLE orders (
+  id SERIAL PRIMARY KEY,
+  user_id INT NOT NULL REFERENCES users(id),
+  total NUMERIC NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- ORDER ITEMS TABLE
+CREATE TABLE order_items (
+  id SERIAL PRIMARY KEY,
+  order_id INT NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+  product_id INT NOT NULL REFERENCES products(id),
+  quantity INT NOT NULL,
+  price NUMERIC NOT NULL
+);
